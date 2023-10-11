@@ -1,0 +1,226 @@
+# Regra 1: Registra solicitações com User-Agent vazio
+SecRule REQUEST_HEADERS:User-Agent "@rx ^$" "phase:1,log,msg:'User-Agent vazio'"
+
+# Regra 2: Registra solicitações com Referer vazio
+SecRule REQUEST_HEADERS:Referer "@rx ^$" "phase:1,log,msg:'Referer vazio'"
+
+# Regra 3: Registra tentativas de explorar diretórios
+SecRule REQUEST_URI "@rx /(\.\.|/)" "phase:1,log,msg:'Tentativa de explorar diretórios'"
+
+# Regra 4: Registra tentativas de acesso a arquivos de configuração
+SecRule REQUEST_URI "@rx (\.hta|\.htaccess|\.htpasswd|\.user.ini|\.conf|\.gitignore)" "phase:1,log,msg:'Tentativa de acesso a arquivo de configuração'"
+
+# Regra 5: Registra tentativas de upload de arquivos suspeitos
+SecRule REQUEST_URI "@rx (\.php|\.jsp|\.aspx|\.exe|\.bat)" "phase:1,log,msg:'Tentativa de upload de arquivo suspeito'"
+
+# Regra 6: Registra tentativas de acesso a arquivos de backup
+SecRule REQUEST_URI "@rx (\.bak|\.old|\.swp)" "phase:1,log,msg:'Tentativa de acesso a arquivo de backup'"
+
+# Regra 7: Registra solicitações com referenciadores externos
+SecRule REQUEST_HEADERS:Referer "!@rx ^https?://(www\.)?seusite\.com" "phase:1,log,msg:'Referenciador externo não permitido'"
+
+# Regra 8: Registra tentativas de acesso com informações confidenciais
+SecRule ARGS "@rx (senha|senha1|senha2|credencial)" "phase:2,log,msg:'Informações confidenciais não permitidas'"
+
+# Regra 9: Registra tentativas de solicitações com versões HTTP não permitidas
+SecRule REQUEST_PROTOCOL "!@rx ^HTTP/1\.[01]$" "phase:1,log,msg:'Versão HTTP não permitida'"
+
+# Regra 10: Registra tentativas de solicitações com URI grandes
+SecRule REQUEST_URI "@gt 255" "phase:1,log,msg:'URI muito longa'"
+
+# Regra 11: Registra tentativas de acesso com cabeçalhos grandes
+SecRule REQUEST_HEADERS:Content-Length "@rx ^[0-9]{4,}$" "phase:1,log,msg:'Cabeçalho Content-Length grande'"
+
+# Regra 12: Registra tentativas de solicitações com User-Agent vazio
+SecRule REQUEST_HEADERS:User-Agent "@rx ^$" "phase:1,log,msg:'Agente de usuário vazio'"
+
+# Regra 13: Registra solicitações com tipos de conteúdo não permitidos
+SecRule REQUEST_HEADERS:Content-Type "!@rx ^(application/x-www-form-urlencoded|multipart/form-data)$" "phase:1,log,msg:'Tipo de conteúdo não permitido'"
+
+# Regra 14: Registra tentativas de caracteres nulos nos parâmetros
+SecRule ARGS "@contains %00" "phase:2,log,msg:'Caractere nulo nos parâmetros'"
+
+# Regra 15: Registra tentativas de injeção SQL
+SecRule ARGS "@rx (union|select|insert|update|delete|drop)" "phase:2,log,msg:'Tentativa de injeção SQL detectada'"
+
+# Regra 16: Registra tentativas de exploração de shell
+SecRule ARGS "@rx (;/bin/|;/usr/|/etc/|/bin/cat)" "phase:2,log,msg:'Tentativa de exploração de shell'"
+
+# Regra 17: Registra tentativas de referenciadores vazios
+SecRule REQUEST_HEADERS:Referer "@rx ^$" "phase:1,log,msg:'Referenciador vazio'"
+
+# Regra 18: Registra solicitações com agentes de usuário vazios
+SecRule REQUEST_HEADERS:User-Agent "@rx ^$" "phase:1,log,msg:'Agente de usuário vazio'"
+
+# Regra 19: Registra tentativas de caracteres Unicode inválidos
+SecRule REQUEST_URI "@rx [^\x00-\x7F]" "phase:2,log,msg:'Caracteres Unicode inválidos na URI'"
+
+# Regra 20: Registra tentativas de solicitações com nomes de argumentos muito longos
+SecAction "id:900310,phase:1,pass,t:none,nolog,setvar:tx.arg_name_length=100"
+
+# Regra 21: Registra tentativas de solicitações com valores de argumentos muito longos
+SecAction "id:900320,phase:1,pass,t:none,nolog,setvar:tx.arg_length=400"
+
+# Regra 22: Registra tentativas de solicitações com comprimento total de argumentos muito longo
+SecAction "id:900330,phase:1,pass,t:none,nolog,setvar:tx.total_arg_length=64000"
+
+# Regra 23: Registra tentativas de acesso com cabeçalhos grandes
+SecRule REQUEST_HEADERS:Host "!@rx ^(\w+\.){2,}" "phase:1,log,msg:'Cabeçalhos HTTP grandes'"
+
+# Regra 24: Registra tentativas de injeção de SQL
+SecRule ARGS "@rx (union|select|insert|update|delete|drop)" "phase:2,log,msg:'Tentativa de injeção SQL detectada'"
+
+# Regra 25: Registra tentativas de exploração de shell
+SecRule ARGS "@rx (;/bin/|;/usr/|/etc/|/bin/cat)" "phase:2,log,msg:'Tentativa de exploração de shell'"
+
+# Regra 26: Registra tentativas de acesso a arquivos restritos
+SecRule REQUEST_URI "@rx /(senha|credencial|admin)" "phase:1,log,msg:'Tentativa de acesso a arquivos restritos'"
+
+# Regra 27: Registra tentativas de acesso não autorizado
+SecRule REQUEST_HEADERS:Authorization "!@rx ^Basic [A-Za-z0-9+/]+=*$" "phase:1,log,msg:'Tentativa de acesso não autorizado'"
+
+# Regra 28: Registra tentativas de referenciadores externos
+SecRule REQUEST_HEADERS:Referer "!@rx ^https?://(www\.)?seusite\.com" "phase:1,log,msg:'Referenciador externo não permitido'"
+
+# Regra 29: Registra solicitações de métodos HTTP não permitidos
+SecRule REQUEST_METHOD "!@rx ^(GET|POST|HEAD)$" "phase:1,log,msg:'Método HTTP não permitido'"
+
+# Regra 30: Registra tentativas de acesso a recursos restritos
+SecRule REQUEST_URI "@rx /recursorestrito" "phase:1,log,msg:'Tentativa de acesso a recurso restrito'"
+
+# Regra 31: Registra tentativas de acesso com informações confidenciais
+SecRule ARGS "@rx (senha|senha1|senha2|credencial)" "phase:2,log,msg:'Informações confidenciais não permitidas'"
+
+# Regra 32: Registra tentativas de acesso com versões HTTP não permitidas
+SecRule REQUEST_PROTOCOL "!@rx ^HTTP/1\.[01]$" "phase:1,log,msg:'Versão HTTP não permitida'"
+
+# Regra 33: Registra tentativas de solicitações com cabeçalhos HTTP grandes
+SecRule REQUEST_HEADERS:Host "!@rx ^(\w+\.){2,}" "phase:1,log,msg:'Cabeçalhos HTTP grandes'"
+
+# Regra 34: Registra tentativas de solicitações com URI grandes
+SecRule REQUEST_URI "@gt 255" "phase:1,log,msg:'URI muito longa'"
+
+# Regra 35: Registra tentativas de solicitações com valores de argumentos muito longos
+SecAction "id:900320,phase:1,pass,t:none,nolog,setvar:tx.arg_length=400"
+
+# Regra 36: Registra tentativas de solicitações com comprimento total de argumentos muito longo
+SecAction "id:900330,phase:1,pass,t:none,nolog,setvar:tx.total_arg_length=64000"
+
+# Regra 37: Registra tentativas de solicitações com URI grandes
+SecRule REQUEST_URI "@gt 255" "phase:1,log,msg:'URI muito longa'"
+
+# Regra 38: Registra tentativas de solicitações com valores de argumentos muito longos
+SecAction "id:900320,phase:1,pass,t:none,nolog,setvar:tx.arg_length=400"
+
+# Regra 39: Registra tentativas de solicitações com comprimento total de argumentos muito longo
+SecAction "id:900330,phase:1,pass,t:none,nolog,setvar:tx.total_arg_length=64000"
+
+# Regra 40: Registra tentativas de solicitações com User-Agent vazio
+SecRule REQUEST_HEADERS:User-Agent "@rx ^$" "phase:1,log,msg:'Agente de usuário vazio'"
+
+# Regra 41: Registra tentativas de solicitações com nomes de argumentos muito longos
+SecAction "id:900310,phase:1,pass,t:none,nolog,setvar:tx.arg_name_length=100"
+
+# Regra 42: Registra tentativas de solicitações com valores de argumentos muito longos
+SecAction "id:900320,phase:1,pass,t:none,nolog,setvar:tx.arg_length=400"
+
+# Regra 43: Registra tentativas de solicitações com comprimento total de argumentos muito longo
+SecAction "id:900330,phase:1,pass,t:none,nolog,setvar:tx.total_arg_length=64000"
+
+# Regra 44: Registra tentativas de solicitações com User-Agent vazio
+SecRule REQUEST_HEADERS:User-Agent "@rx ^$" "phase:1,log,msg:'Agente de usuário vazio'"
+
+# Regra 45: Registra solicitações com tipos de conteúdo não permitidos
+SecRule REQUEST_HEADERS:Content-Type "!@rx ^(application/x-www-form-urlencoded|multipart/form-data)$" "phase:1,log,msg:'Tipo de conteúdo não permitido'"
+
+# Regra 46: Registra tentativas de caracteres nulos nos parâmetros
+SecRule ARGS "@contains %00" "phase:2,log,msg:'Caractere nulo nos parâmetros'"
+
+# Regra 47: Registra tentativas de injeção SQL
+SecRule ARGS "@rx (union|select|insert|update|delete|drop)" "phase:2,log,msg:'Tentativa de injeção SQL detectada'"
+
+# Regra 48: Registra tentativas de exploração de shell
+SecRule ARGS "@rx (;/bin/|;/usr/|/etc/|/bin/cat)" "phase:2,log,msg:'Tentativa de exploração de shell'"
+
+# Regra 49: Registra solicitações com referenciadores vazios
+SecRule REQUEST_HEADERS:Referer "@rx ^$" "phase:1,log,msg:'Referenciador vazio'"
+
+# Regra 50: Registra solicitações com agentes de usuário vazios
+SecRule REQUEST_HEADERS:User-Agent "@rx ^$" "phase:1,log,msg:'Agente de usuário vazio'"
+
+# Regra 51: Bloqueia tentativas de acesso a arquivos de backup do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(.*)(\.bak|\.yml|\.log|\.conf)(\.gz)?$" "phase:1,deny,id:100051,log,msg:'Bloqueio de acesso a arquivos de backup do Elasticsearch'"
+
+# Regra 52: Bloqueia tentativas de acesso a arquivos de configuração do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(config|conf|elasticsearch\.yml|elasticsearch\.conf|elasticsearch\.config)(\.yml|\.conf)?$" "phase:1,deny,id:100052,log,msg:'Bloqueio de acesso a arquivos de configuração do Elasticsearch'"
+
+# Regra 53: Bloqueia tentativas de acesso a arquivos de log do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(log|logs|\.log)$" "phase:1,deny,id:100053,log,msg:'Bloqueio de acesso a arquivos de log do Elasticsearch'"
+
+# Regra 54: Bloqueia tentativas de acesso a arquivos de backup do PostgreSQL
+SecRule REQUEST_URI "@rx /(pg)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100054,log,msg:'Bloqueio de acesso a arquivos de backup do PostgreSQL'"
+
+# Regra 55: Bloqueia tentativas de acesso a arquivos de configuração do PostgreSQL
+SecRule REQUEST_URI "@rx /(pg)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100055,log,msg:'Bloqueio de acesso a arquivos de configuração do PostgreSQL'"
+
+# Regra 56: Bloqueia tentativas de acesso a arquivos de configuração do Lighttpd
+SecRule REQUEST_URI "@rx /(lighttpd)(config|conf)(\.conf)?$" "phase:1,deny,id:100056,log,msg:'Bloqueio de acesso a arquivos de configuração do Lighttpd'"
+
+# Regra 57: Bloqueia tentativas de acesso a arquivos de log do Lighttpd
+SecRule REQUEST_URI "@rx /(lighttpd|access|error)(\.log)?$" "phase:1,deny,id:100057,log,msg:'Bloqueio de acesso a arquivos de log do Lighttpd'"
+
+# Regra 58: Bloqueia tentativas de acesso a arquivos de backup do Microsoft SQL Server
+SecRule REQUEST_URI "@rx /(mssql)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100058,log,msg:'Bloqueio de acesso a arquivos de backup do Microsoft SQL Server'"
+
+# Regra 59: Bloqueia tentativas de acesso a arquivos de configuração do Microsoft SQL Server
+SecRule REQUEST_URI "@rx /(mssql)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100059,log,msg:'Bloqueio de acesso a arquivos de configuração do Microsoft SQL Server'"
+
+# Regra 60: Bloqueia tentativas de acesso a arquivos de configuração do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(config|conf)(\.conf)?$" "phase:1,deny,id:100060,log,msg:'Bloqueio de acesso a arquivos de configuração do Nginx'"
+
+# Regra 61: Bloqueia tentativas de acesso a arquivos de backup do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(.*)(\.bak|\.conf|\.log)(\.gz)?$" "phase:1,deny,id:100061,log,msg:'Bloqueio de acesso a arquivos de backup do Nginx'"
+
+# Regra 62: Bloqueia tentativas de acesso a arquivos de log do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(access|error)(\.log)?$" "phase:1,deny,id:100062,log,msg:'Bloqueio de acesso a arquivos de log do Nginx'"
+
+# Regra 63: Bloqueia tentativas de acesso a arquivos de configuração do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(config|conf|server)(\.xml|\.conf)?$" "phase:1,deny,id:100063,log,msg:'Bloqueio de acesso a arquivos de configuração do Tomcat'"
+
+# Regra 64: Bloqueia tentativas de acesso a arquivos de backup do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(.*)(\.bak|\.xml|\.log|\.conf)(\.gz)?$" "phase:1,deny,id:100064,log,msg:'Bloqueio de acesso a arquivos de backup do Tomcat'"
+
+# Regra 65: Bloqueia tentativas de acesso a arquivos de configuração do WebSphere
+SecRule REQUEST_URI "@rx /(websphere|websphere5)(config|conf|server)(\.xml|\.conf)?$" "phase:1,deny,id:100065,log,msg:'Bloqueio de acesso a arquivos de configuração do WebSphere'"
+
+# Regra 66: Bloqueia tentativas de acesso a arquivos de log do WebSphere
+SecRule REQUEST_URI "@rx /(websphere|websphere5)(logs?|log)(\.log)?$" "phase:1,deny,id:100066,log,msg:'Bloqueio de acesso a arquivos de log do WebSphere'"
+
+# Regra 67: Bloqueia tentativas de acesso a arquivos de configuração do Redis
+SecRule REQUEST_URI "@rx /(redis)(config|conf|redis\.conf|redis\.conf\.bak|redis\.bak)(\.conf)?$" "phase:1,deny,id:100067,log,msg:'Bloqueio de acesso a arquivos de configuração do Redis'"
+
+# Regra 68: Bloqueia tentativas de acesso a arquivos de backup do Redis
+SecRule REQUEST_URI "@rx /(redis)(.*)(\.bak|\.conf|\.rdb)(\.gz)?$" "phase:1,deny,id:100068,log,msg:'Bloqueio de acesso a arquivos de backup do Redis'"
+
+# Regra 69: Bloqueia tentativas de acesso a arquivos de log do Redis
+SecRule REQUEST_URI "@rx /(redis)(log|logs|\.log)$" "phase:1,deny,id:100069,log,msg:'Bloqueio de acesso a arquivos de log do Redis'"
+
+# Regra 70: Bloqueia tentativas de acesso a arquivos de backup do Memcached
+SecRule REQUEST_URI "@rx /(memcached)(.*)(\.bak|\.conf|\.log|\.dump)(\.gz)?$" "phase:1,deny,id:100070,log,msg:'Bloqueio de acesso a arquivos de backup do Memcached'"
+
+# Regra 71: Bloqueia tentativas de acesso a arquivos de configuração do Memcached
+SecRule REQUEST_URI "@rx /(memcached)(config|conf|memcached\.conf|memcached\.bak|memcached\.config)(\.conf)?$" "phase:1,deny,id:100071,log,msg:'Bloqueio de acesso a arquivos de configuração do Memcached'"
+
+# Regra 72: Bloqueia tentativas de acesso a arquivos de log do Memcached
+SecRule REQUEST_URI "@rx /(memcached)(log|logs|\.log)$" "phase:1,deny,id:100072,log,msg:'Bloqueio de acesso a arquivos de log do Memcached'"
+
+# Regra 73: Bloqueia tentativas de acesso a arquivos de backup do MySQL
+SecRule REQUEST_URI "@rx /(mysql|mysql\-backup)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100073,log,msg:'Bloqueio de acesso a arquivos de backup do MySQL'"
+
+# Regra 74: Bloqueia tentativas de acesso a arquivos de configuração do MySQL
+SecRule REQUEST_URI "@rx /(mysql|mysql\-config)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100074,log,msg:'Bloqueio de acesso a arquivos de configuração do MySQL'"
+
+# Regra 75: Bloqueia tentativas de acesso a arquivos de configuração do Apache HTTP Server
+SecRule REQUEST_URI "@rx /(apache|httpd)(config|conf|httpd\.conf|httpd\.config)(\.conf)?$" "phase:1,deny,id:100075,log,msg:'Bloqueio de acesso a arquivos de configuração do Apache HTTP Server'"
+
+
