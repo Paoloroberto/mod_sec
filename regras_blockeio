@@ -1,0 +1,226 @@
+# Regra 1: Bloqueia acesso a arquivos de senhas comuns
+SecRule REQUEST_URI "@rx /(\.|_)?pass(wd|wd|word|list|file|code|hash|phrase|data)?\.(db|inc|txt|md|bak|yml|old|conf|log)" "phase:1,deny,id:100001,log,msg:'Bloqueio de acesso a arquivos de senhas comuns'"
+
+# Regra 2: Bloqueia tentativas de injeção SQL
+SecRule ARGS "@rx (union|select|insert|update|delete|drop)" "phase:2,deny,id:100002,log,msg:'Tentativa de injeção SQL detectada'"
+
+# Regra 3: Bloqueia tentativas de exploração de shell
+SecRule ARGS "@rx (;/bin/|;/usr/|/etc/|/bin/cat)" "phase:2,deny,id:100003,log,msg:'Tentativa de exploração de shell detectada'"
+
+# Regra 4: Bloqueia acesso a arquivos de configuração
+SecRule REQUEST_URI "@rx /(config|settings?|configuration|conf|cfg)(\.(bak|save|old|new|original|dist|test|bak[0-9]+|temp))?(\.php)?" "phase:1,deny,id:100004,log,msg:'Bloqueio de acesso a arquivos de configuração'"
+
+# Regra 5: Bloqueia acesso a arquivos de backup
+SecRule REQUEST_URI "@rx /(\.|_)(bak|backup|old|orig|backup[0-9]+)(\.(db|sql|log|tgz|tar|zip|rar|bak|bak[0-9]+|swp|swo|rpmsave|dpkg|rpmsave|cfg|save|bakup|bck|bac))?" "phase:1,deny,id:100005,log,msg:'Bloqueio de acesso a arquivos de backup'"
+
+# Regra 6: Bloqueia tentativas de acesso a diretórios não autorizados
+SecRule REQUEST_URI "@rx /(\.|_)(private|admin|sys|system|include|config|logs?|backup|conf|data|lib)(/|$)" "phase:1,deny,id:100006,log,msg:'Tentativa de acesso a diretórios não autorizados'"
+
+# Regra 7: Bloqueia tentativas de acesso a arquivos de senhas comuns
+SecRule REQUEST_URI "@rx /(\.|_)?pass(wd|wd|word|list|file|code|hash|phrase|data)?\.(db|inc|txt|md|bak|yml|old|conf|log)" "phase:1,deny,id:100007,log,msg:'Bloqueio de acesso a arquivos de senhas comuns'"
+
+# Regra 8: Bloqueia tentativas de leitura de arquivos .htaccess
+SecRule REQUEST_URI "@rx /(\.|_)?ht(access|passwd|group|data|pwd|conf|users)(\.txt)?$" "phase:1,deny,id:100008,log,msg:'Tentativa de leitura de arquivos .htaccess'"
+
+# Regra 9: Bloqueia tentativas de acesso a diretórios de logs
+SecRule REQUEST_URI "@rx /(\.|_)?logs?(/|$)" "phase:1,deny,id:100009,log,msg:'Tentativa de acesso a diretórios de logs'"
+
+# Regra 10: Bloqueia tentativas de acesso a arquivos de registro
+SecRule REQUEST_URI "@rx /(\.|_)?logs?/.*\.(log|txt)$" "phase:1,deny,id:100010,log,msg:'Tentativa de acesso a arquivos de registro'"
+
+# Regra 11: Bloqueia tentativas de upload de arquivos executáveis
+SecRule MULTIPART_STRICT_ERROR "!@eq 0" "phase:2,deny,id:100011,log,msg:'Tentativa de upload de arquivo executável'"
+
+# Regra 12: Bloqueia tentativas de acesso a arquivos de senha
+SecRule REQUEST_URI "@rx /(senha|credencial|password|passwd)(\.txt)?$" "phase:1,deny,id:100012,log,msg:'Bloqueio de acesso a arquivos de senha'"
+
+# Regra 13: Bloqueia tentativas de acesso a arquivos de chave privada
+SecRule REQUEST_URI "@rx /(chave|key|privatekey)(\.pem|\.key)?$" "phase:1,deny,id:100013,log,msg:'Bloqueio de acesso a arquivos de chave privada'"
+
+# Regra 14: Bloqueia tentativas de acesso a arquivos de backup do MySQL
+SecRule REQUEST_URI "@rx /(\.|_)?mysql(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100014,log,msg:'Bloqueio de acesso a arquivos de backup do MySQL'"
+
+# Regra 15: Bloqueia tentativas de acesso a arquivos de configuração do MySQL
+SecRule REQUEST_URI "@rx /(my|mysql)?(config|admin|admin|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100015,log,msg:'Bloqueio de acesso a arquivos de configuração do MySQL'"
+
+# Regra 16: Bloqueia tentativas de acesso a arquivos .env
+SecRule REQUEST_URI "@rx /(\.|_)?env(\.local)?(\.php)?$" "phase:1,deny,id:100016,log,msg:'Bloqueio de acesso a arquivos .env'"
+
+# Regra 17: Bloqueia tentativas de acesso a arquivos de log de erros
+SecRule REQUEST_URI "@rx /(error)(\.log)?$" "phase:1,deny,id:100017,log,msg:'Bloqueio de acesso a arquivos de log de erros'"
+
+# Regra 18: Bloqueia tentativas de acesso a arquivos de backup do PostgreSQL
+SecRule REQUEST_URI "@rx /(\.|_)?postgres(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100018,log,msg:'Bloqueio de acesso a arquivos de backup do PostgreSQL'"
+
+# Regra 19: Bloqueia tentativas de acesso a arquivos de configuração do PostgreSQL
+SecRule REQUEST_URI "@rx /(postgres|pg)(config|admin|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100019,log,msg:'Bloqueio de acesso a arquivos de configuração do PostgreSQL'"
+
+# Regra 20: Bloqueia tentativas de acesso a arquivos de configuração do Apache
+SecRule REQUEST_URI "@rx /(\.|_)?apache(2)?(config|conf|httpd)(\.conf|\.backup)?$" "phase:1,deny,id:100020,log,msg:'Bloqueio de acesso a arquivos de configuração do Apache'"
+
+# Regra 21: Bloqueia tentativas de acesso a arquivos de log do Apache
+SecRule REQUEST_URI "@rx /(apache|httpd|access|error)(\.log)?$" "phase:1,deny,id:100021,log,msg:'Bloqueio de acesso a arquivos de log do Apache'"
+
+# Regra 22: Bloqueia tentativas de acesso a arquivos de backup do NGINX
+SecRule REQUEST_URI "@rx /(nginx|ngx)(.*)(\.bak|\.conf|\.log)(\.gz)?$" "phase:1,deny,id:100022,log,msg:'Bloqueio de acesso a arquivos de backup do NGINX'"
+
+# Regra 23: Bloqueia tentativas de acesso a arquivos de configuração do NGINX
+SecRule REQUEST_URI "@rx /(nginx|ngx)(config|conf)(\.conf)?$" "phase:1,deny,id:100023,log,msg:'Bloqueio de acesso a arquivos de configuração do NGINX'"
+
+# Regra 24: Bloqueia tentativas de acesso a arquivos de log do NGINX
+SecRule REQUEST_URI "@rx /(nginx|ngx)(access|error)(\.log)?$" "phase:1,deny,id:100024,log,msg:'Bloqueio de acesso a arquivos de log do NGINX'"
+
+# Regra 25: Bloqueia tentativas de acesso a arquivos de backup do IIS
+SecRule REQUEST_URI "@rx /(iis)(.*)(\.bak|\.config|\.log)(\.gz)?$" "phase:1,deny,id:100025,log,msg:'Bloqueio de acesso a arquivos de backup do IIS'"
+
+# Regra 26: Bloqueia tentativas de acesso a arquivos de configuração do IIS
+SecRule REQUEST_URI "@rx /(iis)(config|conf|config\.mof|config\.xml|config\.bak)(\.xml|\.config|\.bak)?$" "phase:1,deny,id:100026,log,msg:'Bloqueio de acesso a arquivos de configuração do IIS'"
+
+# Regra 27: Bloqueia tentativas de acesso a arquivos de log do IIS
+SecRule REQUEST_URI "@rx /(iis|log)(\.log)?$" "phase:1,deny,id:100027,log,msg:'Bloqueio de acesso a arquivos de log do IIS'"
+
+# Regra 28: Bloqueia tentativas de acesso a arquivos de backup do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(.*)(\.bak|\.xml|\.log|\.conf|\.properties)(\.gz)?$" "phase:1,deny,id:100028,log,msg:'Bloqueio de acesso a arquivos de backup do Tomcat'"
+
+# Regra 29: Bloqueia tentativas de acesso a arquivos de configuração do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(config|conf|manager)(\.xml|\.conf)?$" "phase:1,deny,id:100029,log,msg:'Bloqueio de acesso a arquivos de configuração do Tomcat'"
+
+# Regra 30: Bloqueia tentativas de acesso a arquivos de log do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(logs?|log)(\.log)?$" "phase:1,deny,id:100030,log,msg:'Bloqueio de acesso a arquivos de log do Tomcat'"
+
+# Regra 31: Bloqueia tentativas de acesso a arquivos de backup do Redis
+SecRule REQUEST_URI "@rx /(redis)(.*)(\.bak|\.conf|\.rdb)(\.gz)?$" "phase:1,deny,id:100031,log,msg:'Bloqueio de acesso a arquivos de backup do Redis'"
+
+# Regra 32: Bloqueia tentativas de acesso a arquivos de configuração do Redis
+SecRule REQUEST_URI "@rx /(redis)(config|conf|redis\.conf|redis\.conf\.bak|redis\.bak)(\.conf)?$" "phase:1,deny,id:100032,log,msg:'Bloqueio de acesso a arquivos de configuração do Redis'"
+
+# Regra 33: Bloqueia tentativas de acesso a arquivos de log do Redis
+SecRule REQUEST_URI "@rx /(redis)(log|logs|\.log)$" "phase:1,deny,id:100033,log,msg:'Bloqueio de acesso a arquivos de log do Redis'"
+
+# Regra 34: Bloqueia tentativas de acesso a arquivos de backup do MongoDB
+SecRule REQUEST_URI "@rx /(mongodb)(.*)(\.bak|\.conf|\.log)(\.gz)?$" "phase:1,deny,id:100034,log,msg:'Bloqueio de acesso a arquivos de backup do MongoDB'"
+
+# Regra 35: Bloqueia tentativas de acesso a arquivos de configuração do MongoDB
+SecRule REQUEST_URI "@rx /(mongodb)(config|conf|dbpath|settings|mongo\.conf|mongod\.conf)(\.conf)?$" "phase:1,deny,id:100035,log,msg:'Bloqueio de acesso a arquivos de configuração do MongoDB'"
+
+# Regra 36: Bloqueia tentativas de acesso a arquivos de log do MongoDB
+SecRule REQUEST_URI "@rx /(mongodb)(log|logs|\.log)$" "phase:1,deny,id:100036,log,msg:'Bloqueio de acesso a arquivos de log do MongoDB'"
+
+# Regra 37: Bloqueia tentativas de acesso a arquivos de backup do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(.*)(\.bak|\.yml|\.log|\.conf)(\.gz)?$" "phase:1,deny,id:100037,log,msg:'Bloqueio de acesso a arquivos de backup do Elasticsearch'"
+
+# Regra 38: Bloqueia tentativas de acesso a arquivos de configuração do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(config|conf|elasticsearch\.yml|elasticsearch\.conf|elasticsearch\.config)(\.yml|\.conf)?$" "phase:1,deny,id:100038,log,msg:'Bloqueio de acesso a arquivos de configuração do Elasticsearch'"
+
+# Regra 39: Bloqueia tentativas de acesso a arquivos de log do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(log|logs|\.log)$" "phase:1,deny,id:100039,log,msg:'Bloqueio de acesso a arquivos de log do Elasticsearch'"
+
+# Regra 40: Bloqueia tentativas de acesso a arquivos de backup do PostgreSQL
+SecRule REQUEST_URI "@rx /(pg)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100040,log,msg:'Bloqueio de acesso a arquivos de backup do PostgreSQL'"
+
+# Regra 41: Bloqueia tentativas de acesso a arquivos de configuração do PostgreSQL
+SecRule REQUEST_URI "@rx /(pg)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100041,log,msg:'Bloqueio de acesso a arquivos de configuração do PostgreSQL'"
+
+# Regra 42: Bloqueia tentativas de acesso a arquivos de configuração do Lighttpd
+SecRule REQUEST_URI "@rx /(lighttpd)(config|conf)(\.conf)?$" "phase:1,deny,id:100042,log,msg:'Bloqueio de acesso a arquivos de configuração do Lighttpd'"
+
+# Regra 43: Bloqueia tentativas de acesso a arquivos de log do Lighttpd
+SecRule REQUEST_URI "@rx /(lighttpd|access|error)(\.log)?$" "phase:1,deny,id:100043,log,msg:'Bloqueio de acesso a arquivos de log do Lighttpd'"
+
+# Regra 44: Bloqueia tentativas de acesso a arquivos de backup do Microsoft SQL Server
+SecRule REQUEST_URI "@rx /(mssql)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100044,log,msg:'Bloqueio de acesso a arquivos de backup do Microsoft SQL Server'"
+
+# Regra 45: Bloqueia tentativas de acesso a arquivos de configuração do Microsoft SQL Server
+SecRule REQUEST_URI "@rx /(mssql)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100045,log,msg:'Bloqueio de acesso a arquivos de configuração do Microsoft SQL Server'"
+
+# Regra 46: Bloqueia tentativas de acesso a arquivos de configuração do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(config|conf)(\.conf)?$" "phase:1,deny,id:100046,log,msg:'Bloqueio de acesso a arquivos de configuração do Nginx'"
+
+# Regra 47: Bloqueia tentativas de acesso a arquivos de backup do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(.*)(\.bak|\.conf|\.log)(\.gz)?$" "phase:1,deny,id:100047,log,msg:'Bloqueio de acesso a arquivos de backup do Nginx'"
+
+# Regra 48: Bloqueia tentativas de acesso a arquivos de log do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(access|error)(\.log)?$" "phase:1,deny,id:100048,log,msg:'Bloqueio de acesso a arquivos de log do Nginx'"
+
+# Regra 49: Bloqueia tentativas de acesso a arquivos de configuração do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(config|conf|server)(\.xml|\.conf)?$" "phase:1,deny,id:100049,log,msg:'Bloqueio de acesso a arquivos de configuração do Tomcat'"
+
+# Regra 50: Bloqueia tentativas de acesso a arquivos de backup do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(.*)(\.bak|\.xml|\.log|\.conf)(\.gz)?$" "phase:1,deny,id:100050,log,msg:'Bloqueio de acesso a arquivos de backup do Tomcat'"
+
+# Regra 51: Bloqueia tentativas de acesso a arquivos de backup do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(.*)(\.bak|\.yml|\.log|\.conf)(\.gz)?$" "phase:1,deny,id:100051,log,msg:'Bloqueio de acesso a arquivos de backup do Elasticsearch'"
+
+# Regra 52: Bloqueia tentativas de acesso a arquivos de configuração do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(config|conf|elasticsearch\.yml|elasticsearch\.conf|elasticsearch\.config)(\.yml|\.conf)?$" "phase:1,deny,id:100052,log,msg:'Bloqueio de acesso a arquivos de configuração do Elasticsearch'"
+
+# Regra 53: Bloqueia tentativas de acesso a arquivos de log do Elasticsearch
+SecRule REQUEST_URI "@rx /(elasticsearch)(log|logs|\.log)$" "phase:1,deny,id:100053,log,msg:'Bloqueio de acesso a arquivos de log do Elasticsearch'"
+
+# Regra 54: Bloqueia tentativas de acesso a arquivos de backup do PostgreSQL
+SecRule REQUEST_URI "@rx /(pg)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100054,log,msg:'Bloqueio de acesso a arquivos de backup do PostgreSQL'"
+
+# Regra 55: Bloqueia tentativas de acesso a arquivos de configuração do PostgreSQL
+SecRule REQUEST_URI "@rx /(pg)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100055,log,msg:'Bloqueio de acesso a arquivos de configuração do PostgreSQL'"
+
+# Regra 56: Bloqueia tentativas de acesso a arquivos de configuração do Lighttpd
+SecRule REQUEST_URI "@rx /(lighttpd)(config|conf)(\.conf)?$" "phase:1,deny,id:100056,log,msg:'Bloqueio de acesso a arquivos de configuração do Lighttpd'"
+
+# Regra 57: Bloqueia tentativas de acesso a arquivos de log do Lighttpd
+SecRule REQUEST_URI "@rx /(lighttpd|access|error)(\.log)?$" "phase:1,deny,id:100057,log,msg:'Bloqueio de acesso a arquivos de log do Lighttpd'"
+
+# Regra 58: Bloqueia tentativas de acesso a arquivos de backup do Microsoft SQL Server
+SecRule REQUEST_URI "@rx /(mssql)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100058,log,msg:'Bloqueio de acesso a arquivos de backup do Microsoft SQL Server'"
+
+# Regra 59: Bloqueia tentativas de acesso a arquivos de configuração do Microsoft SQL Server
+SecRule REQUEST_URI "@rx /(mssql)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100059,log,msg:'Bloqueio de acesso a arquivos de configuração do Microsoft SQL Server'"
+
+# Regra 60: Bloqueia tentativas de acesso a arquivos de configuração do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(config|conf)(\.conf)?$" "phase:1,deny,id:100060,log,msg:'Bloqueio de acesso a arquivos de configuração do Nginx'"
+
+# Regra 61: Bloqueia tentativas de acesso a arquivos de backup do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(.*)(\.bak|\.conf|\.log)(\.gz)?$" "phase:1,deny,id:100061,log,msg:'Bloqueio de acesso a arquivos de backup do Nginx'"
+
+# Regra 62: Bloqueia tentativas de acesso a arquivos de log do Nginx
+SecRule REQUEST_URI "@rx /(nginx|ngx)(access|error)(\.log)?$" "phase:1,deny,id:100062,log,msg:'Bloqueio de acesso a arquivos de log do Nginx'"
+
+# Regra 63: Bloqueia tentativas de acesso a arquivos de configuração do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(config|conf|server)(\.xml|\.conf)?$" "phase:1,deny,id:100063,log,msg:'Bloqueio de acesso a arquivos de configuração do Tomcat'"
+
+# Regra 64: Bloqueia tentativas de acesso a arquivos de backup do Tomcat
+SecRule REQUEST_URI "@rx /(tomcat)(.*)(\.bak|\.xml|\.log|\.conf)(\.gz)?$" "phase:1,deny,id:100064,log,msg:'Bloqueio de acesso a arquivos de backup do Tomcat'"
+
+# Regra 65: Bloqueia tentativas de acesso a arquivos de configuração do WebSphere
+SecRule REQUEST_URI "@rx /(websphere|websphere5)(config|conf|server)(\.xml|\.conf)?$" "phase:1,deny,id:100065,log,msg:'Bloqueio de acesso a arquivos de configuração do WebSphere'"
+
+# Regra 66: Bloqueia tentativas de acesso a arquivos de log do WebSphere
+SecRule REQUEST_URI "@rx /(websphere|websphere5)(logs?|log)(\.log)?$" "phase:1,deny,id:100066,log,msg:'Bloqueio de acesso a arquivos de log do WebSphere'"
+
+# Regra 67: Bloqueia tentativas de acesso a arquivos de configuração do Redis
+SecRule REQUEST_URI "@rx /(redis)(config|conf|redis\.conf|redis\.conf\.bak|redis\.bak)(\.conf)?$" "phase:1,deny,id:100067,log,msg:'Bloqueio de acesso a arquivos de configuração do Redis'"
+
+# Regra 68: Bloqueia tentativas de acesso a arquivos de backup do Redis
+SecRule REQUEST_URI "@rx /(redis)(.*)(\.bak|\.conf|\.rdb)(\.gz)?$" "phase:1,deny,id:100068,log,msg:'Bloqueio de acesso a arquivos de backup do Redis'"
+
+# Regra 69: Bloqueia tentativas de acesso a arquivos de log do Redis
+SecRule REQUEST_URI "@rx /(redis)(log|logs|\.log)$" "phase:1,deny,id:100069,log,msg:'Bloqueio de acesso a arquivos de log do Redis'"
+
+# Regra 70: Bloqueia tentativas de acesso a arquivos de backup do Memcached
+SecRule REQUEST_URI "@rx /(memcached)(.*)(\.bak|\.conf|\.log|\.dump)(\.gz)?$" "phase:1,deny,id:100070,log,msg:'Bloqueio de acesso a arquivos de backup do Memcached'"
+
+# Regra 71: Bloqueia tentativas de acesso a arquivos de configuração do Memcached
+SecRule REQUEST_URI "@rx /(memcached)(config|conf|memcached\.conf|memcached\.bak|memcached\.config)(\.conf)?$" "phase:1,deny,id:100071,log,msg:'Bloqueio de acesso a arquivos de configuração do Memcached'"
+
+# Regra 72: Bloqueia tentativas de acesso a arquivos de log do Memcached
+SecRule REQUEST_URI "@rx /(memcached)(log|logs|\.log)$" "phase:1,deny,id:100072,log,msg:'Bloqueio de acesso a arquivos de log do Memcached'"
+
+# Regra 73: Bloqueia tentativas de acesso a arquivos de backup do MySQL
+SecRule REQUEST_URI "@rx /(mysql|mysql\-backup)(.*)(\.bak|\.sql|\.old|\.log)(\.gz)?$" "phase:1,deny,id:100073,log,msg:'Bloqueio de acesso a arquivos de backup do MySQL'"
+
+# Regra 74: Bloqueia tentativas de acesso a arquivos de configuração do MySQL
+SecRule REQUEST_URI "@rx /(mysql|mysql\-config)(config|conf|db|conn)(\.sql|\.txt)?$" "phase:1,deny,id:100074,log,msg:'Bloqueio de acesso a arquivos de configuração do MySQL'"
+
+# Regra 75: Bloqueia tentativas de acesso a arquivos de configuração do Apache HTTP Server
+SecRule REQUEST_URI "@rx /(apache|httpd)(config|conf|httpd\.conf|httpd\.config)(\.conf)?$" "phase:1,deny,id:100075,log,msg:'Bloqueio de acesso a arquivos de configuração do Apache HTTP Server'"
+
+
