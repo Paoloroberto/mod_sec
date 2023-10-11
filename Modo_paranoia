@@ -1,0 +1,61 @@
+# Configurações Globais
+SecRuleEngine On
+SecRequestBodyAccess On
+SecResponseBodyAccess Off
+SecRule REQUEST_HEADERS:Content-Type "text/xml" \
+     "id:101,phase:1,t:none,pass,nolog,ctl:requestBodyProcessor=XML"
+
+# Configurações de Injeção de SQL
+SecDefaultAction "phase:2,log,deny,status:403"
+
+# Ativar o Modo Paranoia (muitas verificações para máxima segurança)
+SecRuleRemoveById 949110
+SecRuleRemoveById 960024
+SecRuleRemoveById 960032
+
+# Configurações de Logging
+SecAuditEngine RelevantOnly
+SecAuditLogRelevantStatus "^(?:5|4(?!04))"
+SecAuditLogParts ABIJDEFHZ
+SecAuditLogType Serial
+SecAuditLog /var/log/modsec_audit.log
+SecAuditLogFormat JSON
+
+# Configurações de Exclusão de Regras
+SecRuleRemoveById 930130
+SecRuleRemoveById 981203
+SecRuleRemoveById 981245
+SecRuleRemoveById 981257
+
+# Configurações de IP Block
+SecAction "id:700013,pass,initcol:ip=%{REMOTE_ADDR},nolog"
+SecRule IP:bf_block "@gt 0" "id:700015,pass,nolog,initcol:ip=%{REMOTE_ADDR},setvar:ip.bf_counter=+1,expirevar:ip.bf_counter=3600"
+SecRule IP:bf_counter "@ge 5" "id:700016,pass,nolog,drop,setvar:ip.bf_block=1"
+
+# Configurações de Proteção de Arquivos
+SecRule REQUEST_URI "@pmf blocklist.conf" "id:700016,deny,status:403,msg:'Acesso a recurso proibido'"
+
+# Regras Específicas para WordPress
+SecRule REQUEST_URI "@rx /wp-login\.php" "id:700017,phase:2,t:none,pass,nolog,ctl:ruleRemoveById=981203"
+SecRule REQUEST_HEADERS:Referer "@rx https?://(\d{1,3}\.){3}\d{1,3}.*?/wp-login\.php" "id:700018,phase:2,t:none,pass,nolog,ctl:ruleRemoveById=981173"
+
+# Bloquear Acesso a Arquivos de Configuração
+SecRule REQUEST_URI "@rx \.(htaccess|config|db|ini|log|sh|bak|swp|dist|fla|psd|inc|pot|po|mo|class|less|local|dll|ini|log|sh|bak|inc|pot|po|mo|class|less|local|dll)" "id:700019,phase:2,block,log,msg:'Acesso a arquivo de configuração proibido'"
+
+# Proteção contra Cross-Site Scripting (XSS)
+SecRule REQUEST_COOKIES|!REQUEST_COOKIES:/__utm/|REQUEST_COOKIES_NAMES|ARGS|ARGS_NAMES|XML:/* "(\b(?:on(?:(?:mo(?:use(?:o(?:ver|ut)|down|move|up|ver))|key(?:press|down|up)|c(?:hange|lick|lose))|(?:(?:java|vb)?s(?:cript|cr)|-moz-..(?:a|e|i|o|u)|style|alert|vali|e(?:val|cho)|x(?:pression|ec)|tranche|docu(?:ment|mentElement)))\b)" "id:700020,phase:2,t:none,block,log,msg:'Possível ataque de XSS detectado'"
+
+# Proteção contra Injeção de Comandos
+SecRule ARGS|ARGS_NAMES|REQUEST_HEADERS|REQUEST_HEADERS_NAMES|XML:/* "(?:\b(?:n(?:et(?:user|localgroup)|[etsh]\.exe|e[wrx](?:\.exe|eg)?|msiexec|cmd(?:\.exe)?|nslookup|comspec|ftp|telnet|ping|powershell|bash|id)\b|sh\.\w{2,3})|c(?:md(?:(?:\.exe)?/c)?|d(?:\s*\w?+|o(?:c(?:\.\w{2,4})?)?)|h(?:m?o?d?k?d?i?r|w)|o(?:n(?:s(?:o(?:l(?:e|v)(?:(?:r|r)?\d|[b-w]))?)?)?|py))\b" "id:700021,phase:2,t:none,block,log,msg:'Possível ataque de injeção de comandos detectado'"
+
+# Configurações para proteção do servidor
+ServerTokens Full
+ServerSignature On
+
+# Configurações de Log
+ErrorLog /var/log/apache2/error.log
+LogLevel warn
+
+# Modo de Operação do ModSecurity
+SecTmpDir /tmp
+SecDataDir /tmp
