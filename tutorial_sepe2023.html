@@ -25,8 +25,8 @@
         }
         .copy-button {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 5px;
+            right: 5px;
             padding: 5px 10px;
             background-color: #333;
             color: #fff;
@@ -57,7 +57,7 @@
     <button class="copy-button" onclick="copiarComando('comando4')">Copiar Comando</button>
     </pre>
     <pre><code id="comando5">chown $USER:$USER -R /usr/local/src/</code>
-    <button class"copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
+    <button class="copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
     </pre>
 
     <!-- Adicione mais passos e explicações aqui -->
@@ -101,6 +101,22 @@
     <button class="copy-button" onclick="copiarComando('comando17')">Copiar Comando</button>
     </pre>
 
-    <h2>Conclusão</h2>
-    <p>Se todos os passos foram concluídos com êxito, o ModSecurity deve estar configurado e
+     <script>
+        // Função para copiar o conteúdo da caixa de código para a área de transferência
+        function copiarComando(id) {
+            const elemento = document.getElementById(id);
+            const texto = elemento.innerText;
 
+            const textarea = document.createElement('textarea');
+            textarea.value = texto;
+            document.body.appendChild(textarea);
+
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            alert('Comando copiado para a área de transferência: ' + texto);
+        }
+    </script>
+</body>
+</html>
