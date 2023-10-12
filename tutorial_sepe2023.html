@@ -3,6 +3,13 @@
 
 <head>
     <style>
+        .code-box {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
         .copy-button {
             background-color: #FFFF99; /* Amarelo Claro */
             border: none;
@@ -15,56 +22,36 @@
             margin: 5px 2px;
             cursor: pointer;
         }
-        .info-button {
-            background-color: #337ab7; /* Azul */
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 5px 2px;
-            cursor: pointer;
-        }
-        .info-dialog {
-            display: none;
-        }
     </style>
 </head>
 
 <body>
-    <h1>Tutorial de Instalação</h1>
+    <h1>Instalação do ModSecurity com Nginx</h1>
+    <p>Este tutorial detalhado irá guiá-lo na instalação do ModSecurity com o Nginx em um sistema Linux. Siga as etapas cuidadosamente para fortalecer a segurança do seu servidor web.</p>
 
-    <div>
-        <h2>Passo 1: Atualizar os pacotes</h2>
-        <button class="info-button" onclick="showInfo('step1-info')">Info</button>
+    <div class="code-box">
+        <h2>Passo 1: Atualizar os pacotes e instalar dependências</h2>
         <pre>
-            <code id="step1">
+            <code>
 apt update
+apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev
             </code>
             <button class="copy-button" onclick="copyToClipboard('step1')">Copiar</button>
         </pre>
-        <div class="info-dialog" id="step1-info">
-            <p>Este comando atualiza a lista de pacotes disponíveis em seu sistema.</p>
-        </div>
     </div>
 
-    <div>
-        <h2>Passo 2: Instalar pacotes necessários</h2>
-        <button class="info-button" onclick="showInfo('step2-info')">Info</button>
+    <div class="code-box">
+        <h2>Passo 2: Instalar o Nginx</h2>
         <pre>
-            <code id="step2">
-apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev
+            <code>
+apt update
+apt install nginx-core nginx-common nginx nginx-full
             </code>
             <button class="copy-button" onclick="copyToClipboard('step2')">Copiar</button>
         </pre>
-        <div class="info-dialog" id="step2-info">
-            <p>Este comando instala uma lista de pacotes e bibliotecas necessárias para a instalação.</p>
-        </div>
     </div>
 
-    <!-- Adicione os outros passos aqui -->
+    <!-- Adicione os demais passos aqui -->
 
     <script>
         function copyToClipboard(elementId) {
@@ -76,11 +63,6 @@ apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssde
             document.execCommand('copy');
             document.body.removeChild(textArea);
             alert('Texto copiado para a área de transferência.');
-        }
-
-        function showInfo(infoId) {
-            var infoDialog = document.getElementById(infoId);
-            infoDialog.style.display = 'block';
         }
     </script>
 </body>
