@@ -1,40 +1,126 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Configurando ModSecurity com Nginx</title>
-</head>
-<body>
-    <h1>Configurando ModSecurity com Nginx</h1>
-    <p>Este tutorial descreve como configurar o ModSecurity com o Nginx em um sistema Linux passo a passo. Certifique-se de ter as permissões adequadas para executar os comandos.</p>
+Aqui está um tutorial baseado nos comandos que você forneceu:
 
-    <h2>Passo 1: Atualizar o Sistema</h2>
-    <pre>
-        <code>apt update</code>
-    </pre>
-    <p>Atualiza a lista de pacotes disponíveis no sistema.</p>
+### Instalando e Configurando o ModSecurity com Nginx no Ubuntu
 
-    <h2>Passo 2: Instalar Dependências</h2>
-    <pre>
-        <code>apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code>
-    </pre>
-    <p>Instala as dependências necessárias para compilar o ModSecurity e o Nginx.</p>
+**Nota:** Certifique-se de estar executando esses comandos com privilégios de administrador (ou seja, use `sudo`).
 
-    <h2>Passo 3: Instalar o Nginx</h2>
-    <pre>
-        <code>apt install nginx-core nginx-common nginx nginx-full</code>
-    </pre>
-    <p>Instala o Nginx e suas variantes no sistema.</p>
+#### Etapa 1: Atualizar os repositórios e Instalar Pré-Requisitos
 
-    <h2>Passo 4: Preparar Diretórios</h2>
-    <pre>
-        <code>mkdir -p /usr/local/src/nginx</code>
-        <code>chown $USER:$USER -R /usr/local/src/</code>
-    </pre>
-    <p>Cria o diretório para compilação e define as permissões apropriadas.</p>
+```shell
+apt update
+apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev
+```
 
-    <!-- Continue adicionando mais etapas e explicações -->
+#### Etapa 2: Preparar o ambiente
 
-    <h2>Conclusão</h2>
-    <p>Se todos os passos foram executados corretamente, o ModSecurity deve estar configurado com o Nginx. Certifique-se de testar o servidor para garantir que tudo está funcionando corretamente.</p>
-</body>
-</html>
+```shell
+mkdir -p /usr/local/src/nginx
+chown $USER:$USER -R /usr/local/src/
+cd /usr/local/src/nginx
+apt source nginx
+nginx -v
+```
+
+#### Etapa 3: Instalar o ModSecurity
+
+```shell
+apt install libmodsecurity3
+git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity/
+cd /usr/local/src/ModSecurity/
+git submodule init
+git submodule update
+./build.sh
+./configure
+make -j4
+make install
+```
+
+#### Etapa 4: Preparar o Módulo ModSecurity para o Nginx
+
+```shell
+git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx/
+cd /usr/local/src/nginx/nginx-1.tab
+apt build-dep nginx
+apt install uuid-dev
+```
+
+#### Etapa 5: Configurar o Nginx com ModSecurity
+
+```shell
+./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx
+make modules
+cp objs/ngx_http_modsecurity_module.so /usr/share/nginx/modules/
+nano /etc/nginx/nginx.conf
+```
+
+Dentro do arquivo `/etc/nginx/nginx.conf`, adicione a seguinte linha ao início do arquivo:
+
+```shell
+load_module modules/ngx_http_modsecurity_module.so;
+```
+
+#### Etapa 6: Habilitar o ModSecurity
+
+```shell
+modsecurity on;
+modsecurity_rules_file /etc/nginx/modsec/main.conf;
+```
+
+#### Etapa 7: Configurar o ModSecurity
+
+```shell
+mkdir /etc/nginx/modsec/
+cp /usr/local/src/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf
+nano /etc/nginx/modsec/modsecurity.conf
+```
+
+No arquivo `/etc/nginx/modsec/modsecurity.conf`, modifique a seguinte linha:
+
+```shell
+SecRuleEngine DetectionOnly
+```
+
+#### Etapa 8: Ativar Regras do Core Rule Set
+
+```shell
+nano /etc/nginx/modsec/main.conf
+```
+
+Dentro do arquivo `/etc/nginx/modsec/main.conf`, adicione as seguintes linhas para incluir as regras do Core Rule Set:
+
+```shell
+Include /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf
+Include /etc/nginx/modsec/coreruleset-3.3.0/rules/*.conf
+```
+
+#### Etapa 9: Reiniciar o Nginx
+
+```shell
+systemctl restart nginx
+```
+
+#### Etapa 10: Verificar o Status do Nginx
+
+```shell
+systemctl status nginx
+```
+
+#### Etapa 11: Baixar o Core Rule Set (Regra principal do ModSecurity)
+
+```shell
+wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz
+tar xvf v3.3.0.tar.gz
+mv coreruleset-3.3.0/ /etc/nginx/modsec/
+mv /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf.example /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf
+nano /etc/nginx/modsec/main.conf
+```
+
+Dentro do arquivo `/etc/nginx/modsec/main.conf`, verifique se você incluiu as regras do Core Rule Set.
+
+#### Etapa 12: Reiniciar o Nginx Novamente
+
+```shell
+systemctl restart nginx
+```
+
+Agora, o ModSecurity foi instalado e configurado com o Nginx. Ele está pronto para proteger suas aplicações web contra ataques comuns. Certifique-se de que tudo esteja funcionando corretamente e ajuste as configurações de acordo com as necessidades do seu ambiente.
