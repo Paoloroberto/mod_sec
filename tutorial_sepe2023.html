@@ -23,17 +23,17 @@
         code {
             display: block;
         }
-       .copy-button {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        padding: 5px 10px;
-        background-color: rgba(255, 255, 0, 0.2); /* Amarelo claro com transparência */
-        color: #333;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px; /* Borda arredondada */
-    }
+        .copy-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px 10px;
+            background-color: rgba(255, 255, 0, 0.2); /* Amarelo claro com transparência */
+            color: #333;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px; /* Borda arredondada */
+        }
     </style>
 </head>
 <body>
@@ -58,7 +58,7 @@
     <button class="copy-button" onclick="copiarComando('comando4')">Copiar Comando</button>
     </pre>
     <pre><code id="comando5">chown $USER:$USER -R /usr/local/src/</code>
-    <button class="copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
+    <button class "copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
     </pre>
 
     <!-- Adicione mais passos e explicações aqui -->
@@ -101,23 +101,6 @@
     <pre><code id="comando17">systemctl restart nginx</code>
     <button class="copy-button" onclick="copiarComando('comando17')">Copiar Comando</button>
     </pre>
-
-     <script>
-        // Função para copiar o conteúdo da caixa de código para a área de transferência
-        function copiarComando(id) {
-            const elemento = document.getElementById(id);
-            const texto = elemento.innerText;
-
-            const textarea = document.createElement('textarea');
-            textarea.value = texto;
-            document.body.appendChild(textarea);
-
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-
-            alert('Comando copiado para a área de transferência: ' + texto);
-        }
-    </script>
-</body>
+  </body>
 </html>
+
