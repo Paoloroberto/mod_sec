@@ -1,9 +1,53 @@
-## Instalando e Configurando o ModSecurity com Nginx no Ubuntu
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Configuração do ModSecurity com Nginx</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            line-height: 1.4;
+            overflow: auto;
+        }
+        code {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Configuração do ModSecurity com Nginx</h1>
+    <p>Este tutorial descreve os passos para configurar o ModSecurity com o Nginx em um sistema Linux. Siga as instruções abaixo com cuidado.</p>
 
-**Nota:** Certifique-se de estar executando esses comandos com privilégios de administrador (ou seja, use `sudo`).
+    <h2>Passo 1: Atualizar o Sistema e Instalar Dependências</h2>
+    <p>Atualize a lista de pacotes do sistema e instale as dependências necessárias:</p>
+    <pre><code>apt update</code></pre>
+    <pre><code>apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code></pre>
 
-### Etapa 1: Atualizar os repositórios e Instalar Pré-Requisitos
+    <h2>Passo 2: Instalar e Configurar o Nginx</h2>
+    <p>Instale o Nginx e crie uma estrutura de diretório:</p>
+    <pre><code>apt install nginx-core nginx-common nginx nginx-full</code></pre>
+    <pre><code>mkdir -p /usr/local/src/nginx</code></pre>
+    <pre><code>chown $USER:$USER -R /usr/local/src/</code></pre>
 
-```shell
-apt update
-apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev
+    <!-- Adicione mais passos e explicações aqui -->
+
+    <h2>Passo N: Reiniciar o Nginx</h2>
+    <p>Reinicie o Nginx para aplicar as configurações:</p>
+    <pre><code>systemctl restart nginx</code></pre>
+    <p>Verifique o status do Nginx:</p>
+    <pre><code>systemctl status nginx</code></pre>
+
+    <h2>Conclusão</h2>
+    <p>Se tudo foi feito corretamente, o ModSecurity deve estar configurado com o Nginx. Certifique-se de testar seu servidor para garantir que tudo está funcionando corretamente.</p>
+</body>
+</html>
