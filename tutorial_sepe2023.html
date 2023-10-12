@@ -47,15 +47,16 @@
     <pre><code id="comando2">apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code>
     <button class="copy-button" onclick="copiarComando('comando2')">Copiar Comando</button>
     </pre>
-
-    <h2>Passo 2: Instalar e Configurar o Nginx</h2>
+    <h2>Passo 2: Instalar e Configurar o Nginx</h2> 
     <p>Instale o Nginx e prepare a estrutura de diretórios:</p>
     <pre><code id="comando3">apt install nginx-core nginx-common nginx nginx-full</code>
     <button class="copy-button" onclick="copiarComando('comando3')">Copiar Comando</button>
     </pre>
+    <h2>Passo 3:Criar uma pasta para no Nginx</h2>
     <pre><code id="comando4">mkdir -p /usr/local/src/nginx</code>
     <button class="copy-button" onclick="copiarComando('comando4')">Copiar Comando</button>
     </pre>
+    <h2>Passo 4:Alterando as permissões do usuario</h2>
     <pre><code id="comando5">chown $USER:$USER -R /usr/local/src/</code>
     <button class="copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
     </pre>
