@@ -15,104 +15,56 @@
             margin: 5px 2px;
             cursor: pointer;
         }
+        .info-button {
+            background-color: #337ab7; /* Azul */
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 5px 2px;
+            cursor: pointer;
+        }
+        .info-dialog {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
-    <h1>Guia de Instalação</h1>
+    <h1>Tutorial de Instalação</h1>
 
     <div>
-        <h2>Atualizar os pacotes</h2>
+        <h2>Passo 1: Atualizar os pacotes</h2>
+        <button class="info-button" onclick="showInfo('step1-info')">Info</button>
         <pre>
             <code id="step1">
 apt update
             </code>
             <button class="copy-button" onclick="copyToClipboard('step1')">Copiar</button>
         </pre>
+        <div class="info-dialog" id="step1-info">
+            <p>Este comando atualiza a lista de pacotes disponíveis em seu sistema.</p>
+        </div>
     </div>
 
     <div>
-        <h2>Instalar pacotes necessários</h2>
+        <h2>Passo 2: Instalar pacotes necessários</h2>
+        <button class="info-button" onclick="showInfo('step2-info')">Info</button>
         <pre>
             <code id="step2">
 apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev
             </code>
             <button class="copy-button" onclick="copyToClipboard('step2')">Copiar</button>
         </pre>
+        <div class="info-dialog" id="step2-info">
+            <p>Este comando instala uma lista de pacotes e bibliotecas necessárias para a instalação.</p>
+        </div>
     </div>
 
-    <div>
-        <h2>Instalar o Nginx</h2>
-        <pre>
-            <code id="step3">
-apt update
-apt install nginx-core nginx-common nginx nginx-full
-            </code>
-            <button class="copy-button" onclick="copyToClipboard('step3')">Copiar</button>
-        </pre>
-    </div>
-
-    <div>
-        <h2>Configurar o ambiente do ModSecurity</h2>
-        <pre>
-            <code id="step4">
-mkdir -p /usr/local/src/nginx
-chown $USER:$USER -R /usr/local/src/
-cd /usr/local/src/nginx
-apt source nginx
-nginx -v
-apt install libmodsecurity3
-git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity/
-cd /usr/local/src/ModSecurity/
-git submodule init
-git submodule update
-./build.sh
-./configure
-make -j4
-make install
-git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx/
-cd /usr/local/src/nginx/nginx-1.tab
-apt build-dep nginx
-apt install uuid-dev
-./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx
-make modules
-cp objs/ngx_http_modsecurity_module.so /usr/share/nginx/modules/
-nano /etc/nginx/nginx.conf
-            </code>
-            <button class="copy-button" onclick="copyToClipboard('step4')">Copiar</button>
-        </pre>
-    </div>
-
-    <div>
-        <h2>Configurar ModSecurity</h2>
-        <pre>
-            <code id="step5">
-load_module modules/ngx_http_modsecurity_module.so;
-modsecurity on;
-modsecurity_rules_file /etc/nginx/modsec/main.conf;
-mkdir /etc/nginx/modsec/
-cp /usr/local/src/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf
-nano /etc/nginx/modsec/modsecurity.conf
-SecRuleEngine DetectionOnly
-On
-nano /etc/nginx/modsec/main.conf
-Include /etc/nginx/modsec/modsecurity.conf
-cp /usr/local/src/ModSecurity/unicode.mapping /etc/nginx/modsec/
-nginx -t
-systemctl restart nginx
-systemctl status nginx
-wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz
-tar xvf v3.3.0.tar.gz
-mv coreruleset-3.3.0/ /etc/nginx/modsec/
-mv /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf.example /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf
-nano /etc/nginx/modsec/main.conf
-Include /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf
-Include /etc/nginx/modsec/coreruleset-3.3.0/rules/*.conf
-systemctl restart nginx
-            </code>
-            <button class="copy-button" onclick="copyToClipboard('step5')">Copiar</button>
-        </pre>
-    </div>
+    <!-- Adicione os outros passos aqui -->
 
     <script>
         function copyToClipboard(elementId) {
@@ -124,6 +76,11 @@ systemctl restart nginx
             document.execCommand('copy');
             document.body.removeChild(textArea);
             alert('Texto copiado para a área de transferência.');
+        }
+
+        function showInfo(infoId) {
+            var infoDialog = document.getElementById(infoId);
+            infoDialog.style.display = 'block';
         }
     </script>
 </body>
