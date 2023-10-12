@@ -1,70 +1,77 @@
 <!DOCTYPE html>
 <html>
-
 <head>
+    <title>Configuração do ModSecurity com Nginx</title>
     <style>
-        .code-box {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            max-width: 800px;
         }
-
-        .copy-button {
-            background-color: #FFFF99; /* Amarelo Claro */
-            border: none;
-            color: black;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            margin: 5px 2px;
-            cursor: pointer;
+        h1, h2 {
+            color: #333;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            line-height: 1.4;
+            overflow: auto;
+        }
+        code {
+            display: block;
         }
     </style>
 </head>
-
 <body>
-    <h1>Instalação do ModSecurity com Nginx</h1>
-    <p>Este tutorial detalhado irá guiá-lo na instalação do ModSecurity com o Nginx em um sistema Linux. Siga as etapas cuidadosamente para fortalecer a segurança do seu servidor web.</p>
+    <h1>Configuração do ModSecurity com Nginx</h1>
+    <p>Este tutorial descreve os passos detalhados para configurar o ModSecurity com o Nginx em um sistema Linux. Siga as instruções cuidadosamente.</p>
 
-    <div class="code-box">
-        <h2>Passo 1: Atualizar os pacotes e instalar dependências</h2>
-        <pre>
-            <code>
-apt update
-apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev
-            </code>
-            <button class="copy-button" onclick="copyToClipboard('step1')">Copiar</button>
-        </pre>
-    </div>
+    <h2>Passo 1: Atualizar o Sistema e Instalar Dependências</h2>
+    <p>Atualize a lista de pacotes do sistema e instale as dependências necessárias:</p>
+    <pre><code>apt update</code></pre>
+    <pre><code>apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code></pre>
 
-    <div class="code-box">
-        <h2>Passo 2: Instalar o Nginx</h2>
-        <pre>
-            <code>
-apt update
-apt install nginx-core nginx-common nginx nginx-full
-            </code>
-            <button class="copy-button" onclick="copyToClipboard('step2')">Copiar</button>
-        </pre>
-    </div>
+    <h2>Passo 2: Instalar e Configurar o Nginx</h2>
+    <p>Instale o Nginx e prepare a estrutura de diretórios:</p>
+    <pre><code>apt install nginx-core nginx-common nginx nginx-full</code></pre>
+    <pre><code>mkdir -p /usr/local/src/nginx</code></pre>
+    <pre><code>chown $USER:$USER -R /usr/local/src/</code></pre>
 
-    <!-- Adicione os demais passos aqui -->
+    <h2>Passo 3: Compilar e Instalar o ModSecurity</h2>
+    <p>Compile e instale o ModSecurity para o Nginx:</p>
+    <pre><code>cd /usr/local/src/nginx</code></pre>
+    <pre><code>apt source nginx</code></pre>
+    <pre><code>nginx -v</code></pre>
+    <pre><code>apt install libmodsecurity3</code></pre>
+    <pre><code>git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity/</code></pre>
+    <pre><code>cd /usr/local/src/ModSecurity/</code></pre>
+    <pre><code>git submodule init</code></pre>
+    <pre><code>git submodule update</code></pre>
+    <pre><code>./build.sh</code></pre>
+    <pre><code>./configure</code></pre>
+    <pre><code>make -j4</code></pre>
+    <pre><code>make install</code></pre>
+    
+    <!-- Adicione mais passos e explicações aqui -->
 
-    <script>
-        function copyToClipboard(elementId) {
-            var text = document.getElementById(elementId).textContent;
-            var textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert('Texto copiado para a área de transferência.');
-        }
-    </script>
+    <h2>Passo N: Configurar o Core Rule Set e Reiniciar o Nginx</h2>
+    <p>Configure o Core Rule Set do ModSecurity e reinicie o Nginx:</p>
+    <pre><code>cp /usr/local/src/ModSecurity/unicode.mapping /etc/nginx/modsec/</code></pre>
+    <pre><code>nginx -t</code></pre>
+    <pre><code>systemctl restart nginx</code></pre>
+    <pre><code>systemctl status nginx</code></pre>
+    <pre><code>wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz</code></pre>
+    <pre><code>tar xvf v3.3.0.tar.gz</code></pre>
+    <pre><code>mv coreruleset-3.3.0/ /etc/nginx/modsec/</code></pre>
+    <pre><code>mv /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf.example /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code></pre>
+    <pre><code>nano /etc/nginx/modsec/main.conf</code></pre>
+    <pre><code>Include /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code></pre>
+    <pre><code>Include /etc/nginx/modsec/coreruleset-3.3.0/rules/*.conf</code></pre>
+    <pre><code>systemctl restart nginx</code></pre>
+
+    <h2>Conclusão</h2>
+    <p>Se todos os passos foram concluídos com êxito, o ModSecurity deve estar configurado e funcionando com o Nginx. Certifique-se de testar seu servidor para garantir a segurança e o funcionamento adequados.</p>
 </body>
-
 </html>
