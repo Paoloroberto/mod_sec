@@ -68,6 +68,24 @@
 <pre><code id="comando6">cd /usr/local/src/ModSecurity/</code>
 <button class="copy-button" onclick "copiarComando('comando6')">Copiar Comando</button>
 </pre>
+<h2>Passo 6: Obter o código-fonte do Nginx</h2>
+<pre><code id="comando3">apt source nginx</code>
+<button class="copy-button" onclick="copiarComando('comando3')">Copiar Comando</button>
+</pre>
+<h2>Passo 7: Verificar a versão do Nginx</h2>
+<pre><code id="comando4">nginx -v</code>
+<button class="copy-button" onclick "copiarComando('comando4')">Copiar Comando</button>
+</pre>
+<h2>Passo 8: Instalar o ModSecurity 3</h2>
+<pre><code id="comando5">apt install libmodsecurity3</code>
+<button class="copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
+</pre>
+
+<h2>Passo 9: Clonar o repositório do ModSecurity</h2>
+<pre><code id="comando6">git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity/</code>
+<button class="copy-button" onclick="copiarComando('comando6')">Copiar Comando</button>
+</pre>
+
 <pre><code id="comando7">git submodule init</code>
 <button class="copy-button" onclick="copiarComando('comando7')">Copiar Comando</button>
 </pre>
@@ -87,7 +105,7 @@
 <button class="copy-button" onclick="copiarComando('comando12')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 6: Instalar o Módulo ModSecurity para o Nginx</h2>
+<h2>Passo 10: Instalar o Módulo ModSecurity para o Nginx</h2>
 <pre><code id="comando13">git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx/</code>
 <button class="copy-button" onclick="copiarComando('comando13')">Copiar Comando</button>
 </pre>
@@ -104,12 +122,12 @@
 <button class="copy-button" onclick="copiarComando('comando17')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 7: Configurar o ModSecurity com o Nginx</h2>
+<h2>Passo 11: Configurar o ModSecurity com o Nginx</h2>
 <pre><code id="comando18">nano /etc/nginx/nginx.conf</code>
 <button class="copy-button" onclick="copiarComando('comando18')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 8: Alterar as configurações do arquivo adicionando</h2>
+<h2>Passo 12: Alterar as configurações do arquivo adicionando</h2>
 <pre><code id="comando19">load_module modules/ngx_http_modsecurity_module.so;</code>
 <button class="copy-button" onclick="copiarComando('comando19')">Copiar Comando</button>
 </pre>
@@ -120,17 +138,17 @@
 <button class="copy-button" onclick="copiarComando('comando21')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 9: Criar o diretório de configuração ModSecurity</h2>
+<h2>Passo 13: Criar o diretório de configuração ModSecurity</h2>
 <pre><code id="comando22">mkdir /etc/nginx/modsec/</code>
 <button class="copy-button" onclick="copiarComando('comando22')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 10: Copiar o arquivo de configuração recomendado</h2>
+<h2>Passo 14: Copiar o arquivo de configuração recomendado</h2>
 <pre><code id="comando23">cp /usr/local/src/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf</code>
 <button class="copy-button" onclick="copiarComando('comando23')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 11: Editar o arquivo de configuração ModSecurity</h2>
+<h2>Passo 14: Editar o arquivo de configuração ModSecurity</h2>
 <pre><code id="comando24">nano /etc/nginx/modsec/modsecurity.conf</code>
 <button class="copy-button" onclick="copiarComando('comando24')">Copiar Comando</button>
 </pre>
@@ -141,7 +159,7 @@
 <button class="copy-button" onclick="copiarComando('comando26')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 12: Editar o arquivo de configuração principal do Nginx</h2>
+<h2>Passo 15: Editar o arquivo de configuração principal do Nginx</h2>
 <pre><code id="comando27">nano /etc/nginx/modsec/main.conf</code>
 <button class="copy-button" onclick="copiarComando('comando27')">Copiar Comando</button>
 </pre>
@@ -149,47 +167,47 @@
 <button class="copy-button" onclick="copiarComando('comando28')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 13: Adicionar regras de segurança</h2>
+<h2>Passo 16: Adicionar regras de segurança</h2>
 <pre><code id="comando29">cp /usr/local/src/ModSecurity/unicode.mapping /etc/nginx/modsec/</code>
 <button class="copy-button" onclick="copiarComando('comando29')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 14: Verificar a configuração do Nginx</h2>
+<h2>Passo 17: Verificar a configuração do Nginx</h2>
 <pre><code id="comando30">nginx -t</code>
 <button class="copy-button" onclick="copiarComando('comando30')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 15: Reiniciar o Nginx</h2>
+<h2>Passo 18: Reiniciar o Nginx</h2>
 <pre><code id="comando31">systemctl restart nginx</code>
 <button class="copy-button" onclick="copiarComando('comando31')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 16: Verificar o status do Nginx</h2>
+<h2>Passo 19: Verificar o status do Nginx</h2>
 <pre><code id="comando32">systemctl status nginx</code>
 <button class="copy-button" onclick="copiarComando('comando32')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 17: Baixar o conjunto de regras Core Rule Set (CRS)</h2>
+<h2>Passo 20: Baixar o conjunto de regras Core Rule Set (CRS)</h2>
 <pre><code id="comando33">wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz</code>
 <button class="copy-button" onclick="copiarComando('comando33')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 18: Extrair o conjunto de regras CRS</h2>
+<h2>Passo 21: Extrair o conjunto de regras CRS</h2>
 <pre><code id="comando34">tar xvf v3.3.0.tar.gz</code>
 <button class="copy-button" onclick="copiarComando('comando34')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 19: Mover o conjunto de regras CRS para o diretório ModSecurity</h2>
+<h2>Passo 22: Mover o conjunto de regras CRS para o diretório ModSecurity</h2>
 <pre><code id="comando35">mv coreruleset-3.3.0/ /etc/nginx/modsec/</code>
 <button class="copy-button" onclick="copiarComando('comando35')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 20: Renomear o arquivo de configuração de exemplo</h2>
+<h2>Passo 23: Renomear o arquivo de configuração de exemplo</h2>
 <pre><code id="comando36">mv /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf.example /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code>
 <button class="copy-button" onclick="copiarComando('comando36')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 21: Editar o arquivo de configuração principal do ModSecurity</h2>
+<h2>Passo 24: Editar o arquivo de configuração principal do ModSecurity</h2>
 <pre><code id="comando37">nano /etc/nginx/modsec/main.conf</code>
 <button class="copy-button" onclick="copiarComando('comando37')">Copiar Comando</button>
 </pre>
@@ -200,7 +218,7 @@
 <button class="copy-button" onclick="copiarComando('comando39')">Copiar Comando</button>
 </pre>
 
-<h2>Passo 22: Reiniciar o Nginx</h2>
+<h2>Passo 24: Reiniciar o Nginx</h2>
 <pre><code id="comando40">systemctl restart nginx</code>
 <button class="copy-button" onclick="copiarComando('comando40')">Copiar Comando</button>
 </pre>
