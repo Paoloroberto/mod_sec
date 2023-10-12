@@ -82,11 +82,11 @@
     <p>Verifique o status do Nginx para garantir que tudo esteja funcionando corretamente:</p>
     <pre><code>systemctl status nginx</code></pre>
 
-    <script>
+   <script>
         // Função para copiar o conteúdo da caixa de código para a área de transferência
         function copiarComando(id) {
             const elemento = document.getElementById(id);
-            const texto = elemento.textContent;
+            const texto = elemento.innerText;
 
             const textarea = document.createElement('textarea');
             textarea.value = texto;
@@ -101,3 +101,4 @@
     </script>
 </body>
 </html>
+
