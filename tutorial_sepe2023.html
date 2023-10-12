@@ -116,7 +116,9 @@
 <pre><code id="comando15">git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git /usr/local/src/ModSecurity-nginx/</code>
 <button class="copy-button" onclick="copiarComando('comando13')">Copiar Comando</button>
 </pre>
-<pre><code id="comando16">cd /usr/local/src/nginx/nginx-1.tab</code>
+<pre><code id="comando16">cd /usr/local/src/nginx/nginx-1.18.0 && 
+apt build-dep nginx
+apt install uuid-dev</code>
 <button class="copy-button" onclick="copiarComando('comando14')">Copiar Comando</button>
 </pre>
 <pre><code id="comando17">./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx</code>
