@@ -18,9 +18,20 @@
             font-size: 16px;
             line-height: 1.4;
             overflow: auto;
+            position: relative;
         }
         code {
             display: block;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -30,48 +41,66 @@
 
     <h2>Passo 1: Atualizar o Sistema e Instalar Dependências</h2>
     <p>Atualize a lista de pacotes do sistema e instale as dependências necessárias:</p>
-    <pre><code>apt update</code></pre>
-    <pre><code>apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code></pre>
+    <pre><code id="comando1">apt update</code>
+    <button class="copy-button" onclick="copiarComando('comando1')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando2">apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code>
+    <button class="copy-button" onclick="copiarComando('comando2')">Copiar Comando</button>
+    </pre>
 
     <h2>Passo 2: Instalar e Configurar o Nginx</h2>
     <p>Instale o Nginx e prepare a estrutura de diretórios:</p>
-    <pre><code>apt install nginx-core nginx-common nginx nginx-full</code></pre>
-    <pre><code>mkdir -p /usr/local/src/nginx</code></pre>
-    <pre><code>chown $USER:$USER -R /usr/local/src/</code></pre>
+    <pre><code id="comando3">apt install nginx-core nginx-common nginx nginx-full</code>
+    <button class="copy-button" onclick="copiarComando('comando3')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando4">mkdir -p /usr/local/src/nginx</code>
+    <button class="copy-button" onclick="copiarComando('comando4')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando5">chown $USER:$USER -R /usr/local/src/</code>
+    <button class"copy-button" onclick="copiarComando('comando5')">Copiar Comando</button>
+    </pre>
 
-    <h2>Passo 3: Compilar e Instalar o ModSecurity</h2>
-    <p>Compile e instale o ModSecurity para o Nginx:</p>
-    <pre><code>cd /usr/local/src/nginx</code></pre>
-    <pre><code>apt source nginx</code></pre>
-    <pre><code>nginx -v</code></pre>
-    <pre><code>apt install libmodsecurity3</code></pre>
-    <pre><code>git clone --depth 1 -b v3/master --single-branch https://github.com/SpiderLabs/ModSecurity /usr/local/src/ModSecurity/</code></pre>
-    <pre><code>cd /usr/local/src/ModSecurity/</code></pre>
-    <pre><code>git submodule init</code></pre>
-    <pre><code>git submodule update</code></pre>
-    <pre><code>./build.sh</code></pre>
-    <pre><code>./configure</code></pre>
-    <pre><code>make -j4</code></pre>
-    <pre><code>make install</code></pre>
-    
     <!-- Adicione mais passos e explicações aqui -->
 
-    <h2>Passo N: Configurar o Core Rule Set e Reiniciar o Nginx</h2>
+    <h2>Passo 4: Configurar o Core Rule Set e Reiniciar o Nginx</h2>
     <p>Configure o Core Rule Set do ModSecurity e reinicie o Nginx:</p>
-    <pre><code>cp /usr/local/src/ModSecurity/unicode.mapping /etc/nginx/modsec/</code></pre>
-    <pre><code>nginx -t</code></pre>
-    <pre><code>systemctl restart nginx</code></pre>
-    <pre><code>systemctl status nginx</code></pre>
-    <pre><code>wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz</code></pre>
-    <pre><code>tar xvf v3.3.0.tar.gz</code></pre>
-    <pre><code>mv coreruleset-3.3.0/ /etc/nginx/modsec/</code></pre>
-    <pre><code>mv /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf.example /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code></pre>
-    <pre><code>nano /etc/nginx/modsec/main.conf</code></pre>
-    <pre><code>Include /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code></pre>
-    <pre><code>Include /etc/nginx/modsec/coreruleset-3.3.0/rules/*.conf</code></pre>
-    <pre><code>systemctl restart nginx</code></pre>
+    <pre><code id="comando6">cp /usr/local/src/ModSecurity/unicode.mapping /etc/nginx/modsec/</code>
+    <button class="copy-button" onclick="copiarComando('comando6')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando7">nginx -t</code>
+    <button class="copy-button" onclick="copiarComando('comando7')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando8">systemctl restart nginx</code>
+    <button class="copy-button" onclick="copiarComando('comando8')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando9">systemctl status nginx</code>
+    <button class="copy-button" onclick="copiarComando('comando9')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando10">wget https://github.com/coreruleset/coreruleset/archive/v3.3.0.tar.gz</code>
+    <button class="copy-button" onclick="copiarComando('comando10')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando11">tar xvf v3.3.0.tar.gz</code>
+    <button class="copy-button" onclick="copiarComando('comando11')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando12">mv coreruleset-3.3.0/ /etc/nginx/modsec/</code>
+    <button class="copy-button" onclick="copiarComando('comando12')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando13">mv /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf.example /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code>
+    <button class="copy-button" onclick="copiarComando('comando13')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando14">nano /etc/nginx/modsec/main.conf</code>
+    <button class="copy-button" onclick="copiarComando('comando14')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando15">Include /etc/nginx/modsec/coreruleset-3.3.0/crs-setup.conf</code>
+    <button class="copy-button" onclick="copiarComando('comando15')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando16">Include /etc/nginx/modsec/coreruleset-3.3.0/rules/*.conf</code>
+    <button class="copy-button" onclick="copiarComando('comando16')">Copiar Comando</button>
+    </pre>
+    <pre><code id="comando17">systemctl restart nginx</code>
+    <button class="copy-button" onclick="copiarComando('comando17')">Copiar Comando</button>
+    </pre>
 
     <h2>Conclusão</h2>
-    <p>Se todos os passos foram concluídos com êxito, o ModSecurity deve estar configurado e funcionando com o Nginx. Certifique-se de testar seu servidor para garantir a segurança e o funcionamento adequados.</p>
-</body>
-</html>
+    <p>Se todos os passos foram concluídos com êxito, o ModSecurity deve estar configurado e
+
