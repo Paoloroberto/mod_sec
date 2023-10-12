@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Configurando ModSecurity com Nginx</title>
+</head>
+<body>
+    <h1>Configurando ModSecurity com Nginx</h1>
+    <p>Este tutorial descreve como configurar o ModSecurity com o Nginx em um sistema Linux passo a passo. Certifique-se de ter as permissões adequadas para executar os comandos.</p>
+
+    <h2>Passo 1: Atualizar o Sistema</h2>
+    <pre>
+        <code>apt update</code>
+    </pre>
+    <p>Atualiza a lista de pacotes disponíveis no sistema.</p>
+
+    <h2>Passo 2: Instalar Dependências</h2>
+    <pre>
+        <code>apt install make gcc build-essential autoconf automake libtool libfuzzy-dev ssdeep gettext pkg-config libcurl4-openssl-dev liblua5.3-dev libpcre3 libpcre3-dev libxml2 libxml2-dev libyajl-dev doxygen libcurl4 libgeoip-dev libssl-dev zlib1g-dev libxslt-dev liblmdb-dev libpcre++-dev libgd-dev</code>
+    </pre>
+    <p>Instala as dependências necessárias para compilar o ModSecurity e o Nginx.</p>
+
+    <h2>Passo 3: Instalar o Nginx</h2>
+    <pre>
+        <code>apt install nginx-core nginx-common nginx nginx-full</code>
+    </pre>
+    <p>Instala o Nginx e suas variantes no sistema.</p>
+
+    <h2>Passo 4: Preparar Diretórios</h2>
+    <pre>
+        <code>mkdir -p /usr/local/src/nginx</code>
+        <code>chown $USER:$USER -R /usr/local/src/</code>
+    </pre>
+    <p>Cria o diretório para compilação e define as permissões apropriadas.</p>
+
+    <!-- Continue adicionando mais etapas e explicações -->
+
+    <h2>Conclusão</h2>
+    <p>Se todos os passos foram executados corretamente, o ModSecurity deve estar configurado com o Nginx. Certifique-se de testar o servidor para garantir que tudo está funcionando corretamente.</p>
+</body>
+</html>
