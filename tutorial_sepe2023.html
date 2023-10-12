@@ -28,11 +28,11 @@
             top: 5px;
             right: 5px;
             padding: 5px 10px;
-            background-color: rgba(255, 255, 0, 0.2); /* Amarelo claro com transparência */
+            background-color: rgba(255, 255, 0, 0.2);
             color: #333;
             border: none;
             cursor: pointer;
-            border-radius: 5px; /* Borda arredondada */
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -42,63 +42,62 @@
 
     <h2>Passo 1: Instalar Dependências e Preparar o Código-fonte do Nginx</h2>
     <p>Primeiro, vamos instalar as dependências e preparar o código-fonte do Nginx:</p>
-    <pre><code>cd /usr/local/src/nginx/nginx-1.tab</code></pre>
-    <pre><code>apt build-dep nginx</code></pre>
-    <pre><code>apt install uuid-dev</code></pre>
+    <pre><code>cd /usr/local/src/nginx/nginx-1.tab</code>
+    <button class="copy-button" data-clipboard-target="#command1">Copiar Comando</button>
+    </pre>
+    <pre id="command1"><code>apt build-dep nginx</code></pre>
+    <button class="copy-button" data-clipboard-target="#command2">Copiar Comando</button>
+    <pre id="command2"><code>apt install uuid-dev</code></pre>
+    <button class="copy-button" data-clipboard-target="#command3">Copiar Comando</button>
 
     <h2>Passo 2: Compilar o Módulo ModSecurity para Nginx</h2>
     <p>Agora, vamos compilar o módulo ModSecurity para o Nginx:</p>
-    <pre><code>./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx</code></pre>
-    <pre><code>make modules</code></pre>
-    <pre><code>cp objs/ngx_http_modsecurity_module.so /usr/share/nginx/modules/</code></pre>
+    <pre><code>./configure --with-compat --add-dynamic-module=/usr/local/src/ModSecurity-nginx</code>
+    <button class="copy-button" data-clipboard-target="#command4">Copiar Comando</button>
+    </pre>
+    <pre id="command4"><code>make modules</code></pre>
+    <button class="copy-button" data-clipboard-target="#command5">Copiar Comando</button>
+    <pre id="command5"><code>cp objs/ngx_http_modsecurity_module.so /usr/share/nginx/modules/</code></pre>
+    <button class="copy-button" data-clipboard-target="#command6">Copiar Comando</button>
 
     <h2>Passo 3: Configurar o Nginx para Usar o Módulo ModSecurity</h2>
     <p>Agora, configure o Nginx para usar o módulo ModSecurity:</p>
-    <pre><code>nano /etc/nginx/nginx.conf</code></pre>
+    <pre><code>nano /etc/nginx/nginx.conf</code>
+    <button class="copy-button" data-clipboard-target="#command7">Copiar Comando</button>
+    </pre>
     <p>Adicione as seguintes linhas no arquivo de configuração:</p>
-    <pre><code>load_module modules/ngx_http_modsecurity_module.so;</code></pre>
-    <pre><code>modsecurity on;</code></pre>
-    <pre><code>modsecurity_rules_file /etc/nginx/modsec/main.conf;</code></pre>
+    <pre><code>load_module modules/ngx_http_modsecurity_module.so;</code>
+    <button class="copy-button" data-clipboard-target="#command8">Copiar Comando</button>
+    </pre>
+    <pre id="command8"><code>modsecurity on;</code></pre>
+    <button class="copy-button" data-clipboard-target="#command9">Copiar Comando</button>
+    <pre id="command9"><code>modsecurity_rules_file /etc/nginx/modsec/main.conf;</code></pre>
+    <button class="copy-button" data-clipboard-target="#command10">Copiar Comando</button>
 
     <h2>Passo 4: Preparar o Diretório ModSecurity e Configurar Regras</h2>
     <p>Crie o diretório e configure as regras do ModSecurity:</p>
-    <pre><code>mkdir /etc/nginx/modsec/</code></pre>
-    <pre><code>cp /usr/local/src/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf</code></pre>
-    <pre><code>nano /etc/nginx/modsec/modsecurity.conf</code></pre>
+    <pre><code>mkdir /etc/nginx/modsec/</code>
+    <button class="copy-button" data-clipboard-target="#command11">Copiar Comando</button>
+    </pre>
+    <pre id="command11"><code>cp /usr/local/src/ModSecurity/modsecurity.conf-recommended /etc/nginx/modsec/modsecurity.conf</code></pre>
+    <button class="copy-button" data-clipboard-target="#command12">Copiar Comando</button>
+    </pre>
+    <pre id="command12"><code>nano /etc/nginx/modsec/modsecurity.conf</code></pre>
+    <button class="copy-button" data-clipboard-target="#command13">Copiar Comando</button>
     <p>Adicione a linha abaixo no arquivo modsecurity.conf:</p>
-    <pre><code>SecRuleEngine DetectionOnly</code></pre>
+    <pre><code>SecRuleEngine DetectionOnly</code>
+    <button class="copy-button" data-clipboard-target="#command14">Copiar Comando</button>
+    </pre>
 
     <h2>Passo 5: Incluir Regras no Arquivo de Configuração Principal</h2>
     <p>Edite o arquivo de configuração principal para incluir as regras:</p>
-    <pre><code>nano /etc/nginx/modsec/main.conf</code></pre>
+    <pre><code>nano /etc/nginx/modsec/main.conf</code>
+    <button class="copy-button" data-clipboard-target="#command15">Copiar Comando</button>
+    </pre>
     <p>Adicione as seguintes linhas no arquivo:</p>
-    <pre><code>Include /etc/nginx/modsec/modsecurity.conf</code></pre>
+    <pre><code>Include /etc/nginx/modsec/modsecurity.conf</code>
+    <button class="copy-button" data-clipboard-target="#command16">Copiar Comando</button>
+    </pre>
 
     <h2>Passo 6: Reiniciar o Nginx</h2>
-    <p>Finalmente, reinicie o Nginx para aplicar as configurações:</p>
-    <pre><code>systemctl restart nginx</code></pre>
-
-    <h2>Passo 7: Verificar o Status do Nginx</h2>
-    <p>Verifique o status do Nginx para garantir que tudo esteja funcionando corretamente:</p>
-    <pre><code>systemctl status nginx</code></pre>
-
-   <script>
-        // Função para copiar o conteúdo da caixa de código para a área de transferência
-        function copiarComando(id) {
-            const elemento = document.getElementById(id);
-            const texto = elemento.innerText;
-
-            const textarea = document.createElement('textarea');
-            textarea.value = texto;
-            document.body.appendChild(textarea);
-
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-
-            alert('Comando copiado para a área de transferência: ' + texto);
-        }
-    </script>
-</body>
-</html>
-
+    <p>Finalmente, reinicie o Ngin
